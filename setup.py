@@ -11,28 +11,6 @@ def get_version(fname='formalchemy/__init__.py'):
             if line.startswith('__version__'):
                 return eval(line.split('=')[-1])
 
-try:
-    from msgfmt import Msgfmt
-except:
-    sys.path.insert(0, join(os.getcwd(), 'formalchemy'))
-
-def compile_po(path):
-    from msgfmt import Msgfmt
-    for language in os.listdir(path):
-        lc_path = join(path, language, 'LC_MESSAGES')
-        if os.path.isdir(lc_path):
-            for domain_file in os.listdir(lc_path):
-                if domain_file.endswith('.po'):
-                    file_path = join(lc_path, domain_file)
-                    mo_file = join(lc_path, '%s.mo' % domain_file[:-3])
-                    mo_content = Msgfmt(file_path, name=file_path).get()
-                    mo = open(mo_file, 'wb')
-                    mo.write(mo_content)
-                    mo.close()
-
-# We compile .mo files during setup. Don't think, it is a good idea. [sallner]
-compile_po(join(os.getcwd(), 'formalchemy', 'i18n_resources'))
-
 def read(filename):
     text = open(filename,'r').read()
     return xml.sax.saxutils.escape(text)
